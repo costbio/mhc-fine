@@ -1027,7 +1027,7 @@ template_dict = {
     10: {
         "template": os.path.join(DIR_TEMPLATE, "3mrn.pdb"),
         "protein_tmp_chain": "A",
-        "pep_tmp_chain": "C",
+        "pep_tmp_chain": "P",
     },
     11: {
         "template": os.path.join(DIR_TEMPLATE, "4prb.pdb"),
