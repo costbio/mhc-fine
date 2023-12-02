@@ -1,5 +1,6 @@
 
 ![6vb3](./img/6vb3.png)
+
 *Figure: Comparative Visualization of pMHC Complex Prediction Accuracy. True peptide structure in red, Pandora model in orange, MHC-Fine (fine-tuned AlphaFold) in blue. High precision of MHC-Fine (RMSD: 0.25 Å) versus Pandora (RMSD: 1.44 Å) for PDB ID: 6vb3.*
 
 # MHC-Fine
@@ -21,3 +22,7 @@ To run inference, you need:
 - protein sequence
 - peptide sequence: length 8 to 11
 - unique id: name for the sample
+
+We prepared a Colab notebook which you can use:
+
+[![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1psEiqL2A4V28VwVKSlyx-FlHI15ZI-qs)
