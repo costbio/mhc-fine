@@ -99,7 +99,7 @@ TEMPLATE_FEATURES = {
     "template_aatype": np.float32,
     "template_all_atom_masks": np.float32,
     "template_all_atom_positions": np.float32,
-    "template_sequence": np.object,
+    "template_sequence": np.object_,
     "template_sum_probs": np.float32,
 }
 

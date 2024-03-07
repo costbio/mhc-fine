@@ -706,7 +706,7 @@ def _make_restype_name_to_atom37_ids():
     _lookuptable[""] = len(atom_order)
     res_order = resnames
     _restype_name_to_atom14_names = np.array(
-        [restype_name_to_atom14_names[x] for x in res_order], dtype=np.object
+        [restype_name_to_atom14_names[x] for x in res_order], dtype=np.object_
     )
     return np.vectorize(lambda x: _lookuptable[x])(_restype_name_to_atom14_names)
 
@@ -887,10 +887,10 @@ def _make_rigid_transformation_4x4(ex, ey, translation):
 # and an array with (restype, atomtype, coord) for the atom positions
 # and compute affine transformation matrices (4,4) from one rigid group to the
 # previous group
-restype_atom37_to_rigid_group = np.zeros([21, 37], dtype=np.int)
+restype_atom37_to_rigid_group = np.zeros([21, 37], dtype=np.int_)
 restype_atom37_mask = np.zeros([21, 37], dtype=np.float32)
 restype_atom37_rigid_group_positions = np.zeros([21, 37, 3], dtype=np.float32)
-restype_atom14_to_rigid_group = np.zeros([21, 14], dtype=np.int)
+restype_atom14_to_rigid_group = np.zeros([21, 14], dtype=np.int_)
 restype_atom14_mask = np.zeros([21, 14], dtype=np.float32)
 restype_atom14_rigid_group_positions = np.zeros([21, 14, 3], dtype=np.float32)
 restype_rigid_group_default_frame = np.zeros([21, 8, 4, 4], dtype=np.float32)
