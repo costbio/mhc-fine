@@ -44,15 +44,7 @@ Check cuda version to select corresponding pytorch version: `nvidia-smi`
 
 `conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia`
 
-`pip install Bio`
-
-`pip install notebook`
-
-`pip install absl-py`
-
-`pip install scipy`
-
-`pip install gdown`
+`pip install Bio notebook absl-py scipy gdown`
 
 `conda install https://anaconda.org/bioconda/kalign3/3.4.0/download/linux-64/kalign3-3.4.0-hdbdd923_0.tar.bz2`
 
