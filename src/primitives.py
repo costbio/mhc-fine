@@ -16,7 +16,6 @@ import math
 from functools import partial
 from typing import Callable, List, Optional, Sequence, Tuple
 
-import deepspeed
 import numpy as np
 import torch
 import torch.nn as nn
@@ -176,7 +175,7 @@ class LayerNorm(nn.Module):
 
     def forward(self, x):
         d = x.dtype
-        if d is torch.bfloat16 and not deepspeed.utils.is_initialized():
+        if d is torch.bfloat16:
             with torch.cuda.amp.autocast(enabled=False):
                 out = nn.functional.layer_norm(
                     x,
@@ -204,7 +203,7 @@ def softmax_no_cast(t: torch.Tensor, dim: int = -1) -> torch.Tensor:
     type bfloat16
     """
     d = t.dtype
-    if d is torch.bfloat16 and not deepspeed.utils.is_initialized():
+    if d is torch.bfloat16:
         with torch.cuda.amp.autocast(enabled=False):
             s = torch.nn.functional.softmax(t, dim=dim)
     else:

@@ -11,11 +11,41 @@ The precise prediction of Major Histocompatibility Complex (MHC)-peptide complex
 
 You can download the latest version of the model from Google drive: [link](https://drive.google.com/file/d/1gz8uF8DKE0CzyX_WeDGOX7xP69LjpaZT/view?usp=sharing)
 
-# Installation
+# Environment Setup
 
-All required libraries will be installed in the notebook [Inference.ipynb](./Inference.ipynb).
+## Create virtual environment
+
+`conda create -n mhc-fine python=3.12`
+
+`conda activate mhc-fine`
+
+## Install libraries
+
+Check cuda version to select corresponding pytorch version: `nvidia-smi`
+
+`conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia`
+
+`pip install Bio`
+
+`pip install notebook`
+
+`pip install absl-py`
+
+`pip install scipy`
+
+`pip install gdown`
+
+`conda install https://anaconda.org/bioconda/kalign3/3.4.0/download/linux-64/kalign3-3.4.0-hdbdd923_0.tar.bz2`
 
 # Inference
+
+## Locally using Jupyter Notebook
+
+`jupyter notebook`
+
+Open [Inference.ipynb](./Inference.ipynb).
+
+## Remotely using Colab
 
 To run inference, you need:
 
