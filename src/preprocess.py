@@ -19,6 +19,7 @@ import dataclasses
 import io
 import os
 import re
+import shutil
 import string
 import subprocess
 import sys
@@ -660,6 +661,8 @@ def make_single_pdb_temp(
     is_protein,
     kalign_binary_path=sys.prefix + '/bin/kalign',
 ):
+    if not os.path.isfile(kalign_binary_path):
+        kalign_binary_path=shutil.which('kalign')
     temp_seq = "".join(pdb_template_object.res_name)
     if is_protein:
         aligner = kalign.Kalign(binary_path=kalign_binary_path)
