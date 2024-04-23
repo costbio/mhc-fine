@@ -22,7 +22,7 @@ import re
 import shutil
 import string
 import subprocess
-import time
+import sys
 from typing import Dict, List, MutableMapping, Optional, Sequence, Tuple
 
 import numpy as np
@@ -659,8 +659,10 @@ def make_single_pdb_temp(
     query_seq,
     pdb_template_object,
     is_protein,
-    kalign_binary_path=shutil.which("kalign"),
+    kalign_binary_path=sys.prefix + '/bin/kalign',
 ):
+    if not os.path.isfile(kalign_binary_path):
+        kalign_binary_path=shutil.which('kalign')
     temp_seq = "".join(pdb_template_object.res_name)
     if is_protein:
         aligner = kalign.Kalign(binary_path=kalign_binary_path)
@@ -928,47 +930,14 @@ def from_pdb_string(pdb_str: str, chain_id: Optional[str] = None) -> Protein:
 
 
 def get_a3m(protein_sequence, a3m_path: str, unique_id: str):
-    # Write protein sequence to query.fasta
-    with open(os.path.join("a3m_generation", "query.fasta"), "w") as file:
+    filename_query = os.path.join("a3m_generation", 'query_' + unique_id + '.fasta')
+    with open(filename_query, "w") as file:
         file.write(">" + unique_id + "\n" + protein_sequence)
-
-    result = subprocess.run(
-        "./a3m_generation/api_version --fasta_file a3m_generation/query.fasta",
-        shell=True,
-        capture_output=True,
-        text=True,
-    )
-    print(result)
-    job_id = result.stdout.split()[-1]  # Extracting job ID from the output
-    time.sleep(3)
-
-    # Check status and wait until it's complete
-    while True:
-        result = subprocess.run(
-            f"./a3m_generation/api_down_status --mode=status --uuid={job_id}",
-            shell=True,
-            capture_output=True,
-            text=True,
-        )
-        status = result.stdout.split()[-1]
-        print(f"Status is {status}.")
-        if status == "complete":
-            print("Complete.")
-            break
-        time.sleep(5)
-
-    result = subprocess.run(
-        f"./a3m_generation/api_down_status --mode=download --uuid={job_id} --output=temp",
-        shell=True,
-        capture_output=True,
-        text=True,
-    )
-
-    shutil.unpack_archive("temp.tar.gz", "temp")
     os.makedirs(os.path.dirname(a3m_path), exist_ok=True)
-    os.rename("temp/runner/job.a3m", "aggregated.a3m")
-    shutil.move("aggregated.a3m", os.path.dirname(a3m_path))
-
-    # Remove temp directory and archive
-    shutil.rmtree("temp")
-    os.remove("temp.tar.gz")
+    result = subprocess.run(
+        f"./a3m_generation/msa_run --fasta_file {filename_query} --output_file {a3m_path}",
+        shell=True,
+        capture_output=True,
+        text=True,
+    )
+    os.remove(filename_query)
