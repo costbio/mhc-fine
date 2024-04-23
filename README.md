@@ -8,10 +8,10 @@
 The precise prediction of Major Histocompatibility Complex (MHC)-peptide complex structures is pivotal for understanding cellular immune responses and advancing vaccine design. In this study, we enhanced AlphaFold's capabilities by fine-tuning it with a specialized dataset comprised by exclusively high-resolution MHC-peptide crystal structures. This tailored approach aimed to address the generalist nature of AlphaFold's original training, which, while broad-ranging, lacked the granularity necessary for the high-precision demands of MHC-peptide interaction prediction. A comparative analysis was conducted against the homology-modeling-based method Pandora, as well as the AlphaFold multimer model. Our results demonstrate that our fine-tuned model outperforms both in terms of RMSD (median value is 0.65 Å) but also provides enhanced predicted lDDT scores, offering a more reliable assessment of the predicted structures. These advances have substantial implications for computational immunology, potentially accelerating the development of novel therapeutics and vaccines by providing a more precise computational lens through which to view MHC-peptide interactions.
 
 # Table of Content
-- [News](#news)
-- [Pretrained Model](#pretrained-model)
-- [Inference](#inference): [Colab](#remotely-using-colab), [Local](#locally-using-jupyter-notebook)
-- [Citation](#citation)
+* [News](#markdown-header-news)
+* [Pretrained Model](#markdown-header-pretrained-model)
+* [Inference](#markdown-header-inference): [Colab](#markdown-header-remotely-using-colab), [Local](#markdown-header-locally-using-jupyter-notebook)
+* [Citation](#markdown-header-citation)
 
 # News
 
@@ -37,7 +37,7 @@ We prepared a Colab notebook which you can use:
 
 ## Locally using Jupyter Notebook
 
-If you want to run it locally, please follow the [instruction](#environment-setup-instruction) to set up the environment and 
+If you want to run it locally, please follow the [instruction](#markdown-header-environment-setup-instruction) to set up the environment and 
 run `jupyter notebook` to open [Inference.ipynb](./Inference.ipynb).
 
 ### Environment Setup Instruction
