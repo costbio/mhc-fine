@@ -930,19 +930,14 @@ def from_pdb_string(pdb_str: str, chain_id: Optional[str] = None) -> Protein:
 
 
 def get_a3m(protein_sequence, a3m_path: str, unique_id: str):
-    result = subprocess.run(
-        "chmod +x ./a3m_generation/msa_run",
-        shell=True,
-        capture_output=True,
-        text=True,
-    )
-    with open(os.path.join("a3m_generation", "query.fasta"), "w") as file:
+    filename_query = os.path.join("a3m_generation", 'query_' + unique_id + '.fasta')
+    with open(filename_query, "w") as file:
         file.write(">" + unique_id + "\n" + protein_sequence)
     os.makedirs(os.path.dirname(a3m_path), exist_ok=True)
     result = subprocess.run(
-        f"./a3m_generation/msa_run --fasta_file a3m_generation/query.fasta --output_file {a3m_path}",
+        f"./a3m_generation/msa_run --fasta_file {filename_query} --output_file {a3m_path}",
         shell=True,
         capture_output=True,
         text=True,
     )
-    print(result) # This line is not necessary if we do not want to display the output
+    os.remove(filename_query)
