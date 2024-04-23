@@ -32,19 +32,23 @@ run `jupyter notebook` to open [Inference.ipynb](./Inference.ipynb).
 
 ### Environment Setup Instruction
 
-Create a virtual environment *mhc-fine*:
+Option 1: using [mhc_fine.yml](mhc_fine.yml)
 
-`conda create -n mhc-fine python=3.12`
+```
+conda create -f mhc_fine.yml
+```
 
-`conda activate mhc-fine`
+Option 2: 
 
-### Install Required Libraries
+If Option 1 does not work, please create the environment mannually with the following instructions.
 
-Check cuda version to select corresponding pytorch version: `nvidia-smi`
-
-`conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia`
-
-`pip install Bio notebook absl-py scipy gdown`
-
-`conda install https://anaconda.org/bioconda/kalign3/3.4.0/download/linux-64/kalign3-3.4.0-hdbdd923_0.tar.bz2`
-
+```
+conda create -n mhc-fine-test2
+conda activate mhc-fine-test2
+conda install -y libgcc-ng libstdcxx-ng -c conda-forge
+conda install -y kalign3=3.4 -c bioconda
+# If you have a different cuda version, please visit pytorch website
+conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
+conda install -y biopython gdown -c conda-forge
+conda install -y absl-py scipy pandas jupyter -c anaconda
+```

@@ -19,10 +19,9 @@ import dataclasses
 import io
 import os
 import re
-import shutil
 import string
 import subprocess
-import time
+import sys
 from typing import Dict, List, MutableMapping, Optional, Sequence, Tuple
 
 import numpy as np
@@ -659,7 +658,7 @@ def make_single_pdb_temp(
     query_seq,
     pdb_template_object,
     is_protein,
-    kalign_binary_path=shutil.which("kalign"),
+    kalign_binary_path=sys.prefix + '/bin/kalign',
 ):
     temp_seq = "".join(pdb_template_object.res_name)
     if is_protein:
