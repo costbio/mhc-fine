@@ -64,12 +64,13 @@ conda install absl-py scipy pandas jupyter -c anaconda
 ```
 
 # Citation
-
 ```
-@article{Glukhov2023MHCFine,
-  title={MHC-Fine: Fine-tuned AlphaFold for Precise MHC-Peptide Complex Prediction},
-  author={Ernest Glukhov and Dmytro Kalitin and Darya Stepanenko and Yimin Zhu and Thu Nguen and George Jones and Carlos Simmerling and Julie C. Mitchell and Sandor Vajda and Ken A. Dill and Dzmitry Padhorny and Dima Kozakov},
-  journal={bioRxiv},
-  year={2023},
-}
+@article{GLUKHOV2024,
+title = {MHC-Fine: Fine-tuned AlphaFold for Precise MHC-Peptide Complex Prediction},
+journal = {Biophysical Journal},
+year = {2024},
+issn = {0006-3495},
+doi = {https://doi.org/10.1016/j.bpj.2024.05.011},
+url = {https://www.sciencedirect.com/science/article/pii/S0006349524003254},
+author = {Ernest Glukhov and Dmytro Kalitin and Darya Stepanenko and Yimin Zhu and Thu Nguyen and George Jones and Taras Patsahan and Carlos Simmerling and Julie C. Mitchell and Sandor Vajda and Ken A. Dill and Dzmitry Padhorny and Dima Kozakov},
 ```
