@@ -330,6 +330,28 @@ config_multimer = {
                 "weight": 1.0,
             },
         },
+        'compression': {
+            'distillation_loss_enabled': False,
+            'return_msa_pair_activations': False,
+            'evoformer_weights_indices': None,
+            'huber_delta': 0.2,
+            'msa_act_weight': 128,
+            'pair_act_weight': 128
+        },
+        'checkpointing': {
+            'frag_extra_stack_ckpt': True,
+            'template_ckpt': True,
+            'evoformer_ckpt': True,
+            'num_segments': 8
+        },
+        'msa_noising': {
+            'noise_msa': False,
+            'remove_msa': False,
+            'remove_msa': True,
+            'reduce_msa': False,
+            'epoch_number': 1000,
+            'reduction_factor': 0.5
+        },
         "masked_losses_factor": 2,
         "num_ensemble_eval": 1,
         "num_recycle": 1,

@@ -38,7 +38,7 @@ class Model:
         ), "Please download the model by following the instructions provided in the README."
         with torch.set_grad_enabled(False):
             self.model = self.get_model_from_dict(
-                model_path, config_multimer.config_multimer
+                model_path, self.set_cfg(config_multimer.config_multimer, model_path)
             ).to("cuda")
 
     def inference(self, np_sample, in_unique_id):
@@ -97,7 +97,26 @@ class Model:
         """
         model = modules.DockerIteration(global_config)
         model.load_state_dict(torch.load(in_path_saved_state_dict))
+        removed_blocks = [i for i in range(global_config['model']['embeddings_and_evoformer']['evoformer_num_block']) 
+        if i not in global_config['model']['compression']['evoformer_weights_indices']]
+        for evo_i in removed_blocks:
+            model.Evoformer[int(evo_i)].skip_coefficient = 1
         return model
+
+    def set_cfg(self, config, model_path):
+        model_name = model_path.split("/")[-1].split(".")[0]
+        if model_name == "mhc_fine_light50":
+            config["model"]["msa_noising"]["remove_msa"] = True
+        elif model_name == "mhc_fine_light22":
+            config["model"]["msa_noising"]["remove_msa"] = True
+            config["model"]["compression"]["evoformer_weights_indices"] = [0, 1, 9, 13, 17, 24, 29, 32, 34, 36, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49]
+        elif model_name == "mhc_fine_light10":
+            config["model"]["msa_noising"]["remove_msa"] = True
+            config["model"]["compression"]["evoformer_weights_indices"] = [0, 1, 17, 38, 41, 43, 46, 47, 48, 49]
+        elif model_name == "mhc_fine_light3":
+            config["model"]["msa_noising"]["remove_msa"] = True
+            config["model"]["compression"]["evoformer_weights_indices"] = [45, 46, 47]
+        return config
 
     def get_metric(self, plddt, mask):
         """Get metrics of the model.

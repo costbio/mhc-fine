@@ -195,10 +195,12 @@ def process_single_chain(
         description=chain_id,
         num_res=len(input_sequence),
     )
-
-    msa = parse_a3m(in_a3m_string)
-    msa_feat = make_msa_features((msa,))
-    chain_feat.update(msa_feat)
+    
+    msa = None
+    if in_a3m_string:
+        msa = parse_a3m(in_a3m_string)
+        msa_feat = make_msa_features((msa,))
+        chain_feat.update(msa_feat)
 
     if pdb_template_object is not None:
         temp_feat = make_single_pdb_temp(
@@ -208,7 +210,7 @@ def process_single_chain(
         )
         chain_feat.update(temp_feat)
 
-    if not is_homomer_or_monomer:
+    if not is_homomer_or_monomer and msa:
         all_seq_features = make_msa_features([msa])
         valid_feats = (
             "msa",
@@ -238,7 +240,7 @@ Output:
 """
 
 
-def preprocess_for_inference(protein_seq, peptide_seq, protein_a3m_path):
+def preprocess_for_inference(protein_seq, peptide_seq, protein_a3m_path=None):
     single_dataset = {
         "protein_seq": protein_seq,
         "peptide_seq": peptide_seq,
@@ -257,13 +259,15 @@ def preprocess_for_inference(protein_seq, peptide_seq, protein_a3m_path):
     else:
         pdb_template_string = None
 
-    print("Reading a3m file...")
-    # preprocess protein chain
-    if not os.path.exists(protein_a3m_path):
-        print(f"No a3m file found for protein at {protein_a3m_path}")
-        return None
-    with open(protein_a3m_path, "r") as f:
-        a3m_string_protein = f.read()
+    a3m_string_protein = None
+    if protein_a3m_path:
+        print("Reading a3m file...")
+        # preprocess protein chain
+        if not os.path.exists(protein_a3m_path):
+            print(f"No a3m file found for protein at {protein_a3m_path}")
+        else:
+            with open(protein_a3m_path, "r") as f:
+                a3m_string_protein = f.read()
 
     print("Processing protein chain...")
     protein_template_object = from_pdb_string(
@@ -319,17 +323,18 @@ def process_unmerged_features(all_chain_features):
     num_chains = len(all_chain_features)
     for chain_features in all_chain_features.values():
         # Convert deletion matrices to float.
-        chain_features["deletion_matrix"] = np.asarray(
-            chain_features.pop("deletion_matrix_int"), dtype=np.float32
-        )
-        if "deletion_matrix_int_all_seq" in chain_features:
-            chain_features["deletion_matrix_all_seq"] = np.asarray(
-                chain_features.pop("deletion_matrix_int_all_seq"), dtype=np.float32
+        if "deletion_matrix_int" in chain_features:
+            chain_features["deletion_matrix"] = np.asarray(
+                chain_features.pop("deletion_matrix_int"), dtype=np.float32
             )
+            if "deletion_matrix_int_all_seq" in chain_features:
+                chain_features["deletion_matrix_all_seq"] = np.asarray(
+                    chain_features.pop("deletion_matrix_int_all_seq"), dtype=np.float32
+                )
 
-        chain_features["deletion_mean"] = np.mean(
-            chain_features["deletion_matrix"], axis=0
-        )
+            chain_features["deletion_mean"] = np.mean(
+                chain_features["deletion_matrix"], axis=0
+            )
 
         # Add assembly_num_chains.
         chain_features["assembly_num_chains"] = np.asarray(num_chains)
@@ -355,7 +360,8 @@ def pair_and_merge(all_chain_features, is_homomer):
 
     np_chains_list = list(all_chain_features.values())
 
-    pair_msa_sequences = not is_homomer
+    # We can only pair MSA sequences if we have an MSA.
+    pair_msa_sequences = not is_homomer and "msa" in np_chains_list[0]
 
     if pair_msa_sequences:
         np_chains_list = msa_pairing.create_paired_features(chains=np_chains_list)
@@ -415,9 +421,10 @@ def crop_chains(
 
 def process_final(np_example: FeatureDict) -> FeatureDict:
     """Final processing steps in data pipeline, after merging and pairing."""
-    np_example = _correct_msa_restypes(np_example)
+    if "msa" in np_example:
+        np_example = _correct_msa_restypes(np_example)
+        np_example = _make_msa_mask(np_example)
     np_example = _make_seq_mask(np_example)
-    np_example = _make_msa_mask(np_example)
     np_example = _filter_features(np_example)
     return np_example
 
@@ -728,15 +735,19 @@ def make_single_pdb_temp(
 
 def pad_msa(np_example, min_num_seq):
     np_example = dict(np_example)
+    if "msa" not in np_example:
+        return np_example
     num_seq = np_example["msa"].shape[0]
     if num_seq < min_num_seq:
         for feat in ("msa", "deletion_matrix", "bert_mask", "msa_mask"):
-            np_example[feat] = np.pad(
-                np_example[feat], ((0, min_num_seq - num_seq), (0, 0))
+            if feat in np_example:
+                np_example[feat] = np.pad(
+                    np_example[feat], ((0, min_num_seq - num_seq), (0, 0))
+                )
+        if "cluster_bias_mask" in np_example:
+            np_example["cluster_bias_mask"] = np.pad(
+                np_example["cluster_bias_mask"], ((0, min_num_seq - num_seq),)
             )
-        np_example["cluster_bias_mask"] = np.pad(
-            np_example["cluster_bias_mask"], ((0, min_num_seq - num_seq),)
-        )
     return np_example
 
 
