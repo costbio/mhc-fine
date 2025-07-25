@@ -24,7 +24,7 @@ import torch
 from torch import nn
 from torch.utils.checkpoint import checkpoint
 
-from src import config_multimer, constants, rigid
+from src import config_multimer, constants, rigid, strategies
 from src.chunk_utils import chunk_layer
 from src.primitives import Attention, GlobalAttention
 from src.tensor_utils import masked_mean
@@ -150,7 +150,10 @@ class DockerIteration(nn.Module):
 
     def forward(self, init_batch, msa_indices_prefix=None):
         index_init = 0
-        batch = self._preprocess_batch_msa(init_batch, index_init, msa_indices_prefix)
+        if not self.global_config["model"]["msa_noising"]["remove_msa"]:
+            batch = self._preprocess_batch_msa(init_batch, index_init, msa_indices_prefix)
+        else:
+            batch = init_batch
 
         recycles = None
 
@@ -244,8 +247,11 @@ class EvoformerIteration(nn.Module):
             config["triangle_attention_ending_node"], global_config
         )
         self.PairTransition = Transition(config["pair_transition"], global_config)
+        self.skip_coefficient = 0
 
     def forward(self, msa_act, pair_act, msa_mask, pair_mask):
+        if self.skip_coefficient == 1:
+            return msa_act, pair_act
         pair_act = pair_act + self.OuterProductMean(msa_act, msa_mask)
         msa_act = msa_act + self.RowAttentionWithPairBias(msa_act, pair_act, msa_mask)
         msa_act = msa_act + self.LigColumnAttention(msa_act, msa_mask)
@@ -459,6 +465,9 @@ class InputEmbedding(nn.Module):
         )
         self.FragExtraStack = FragExtraStack(global_config)
 
+        self.msa_removal_strategy = strategies.MsaRemovalStrategyFactory().create_strategy(self)
+        self.msa_reduction_strategy = strategies.MsaReductionStrategyFactory().create_strategy(self)
+
     def forward(self, batch, recycle):
         num_batch, num_res = batch["aatype"].shape[0], batch["aatype"].shape[1]
         target_feat = nn.functional.one_hot(batch["aatype"].long(), 21).float()
@@ -466,7 +475,7 @@ class InputEmbedding(nn.Module):
         left_single = self.left_single(target_feat)
         right_single = self.right_single(target_feat)
         pair_activations = left_single.unsqueeze(2) + right_single.unsqueeze(1)
-        preprocess_msa = self.preprocess_msa(batch["msa_feat"])
+        preprocess_msa = self.msa_removal_strategy.get_preprocess_msa(self, batch, target_feat)
         msa_activations = preprocess_msa + preprocessed_1d
         mask_2d = batch["seq_mask"][..., None] * batch["seq_mask"][..., None, :]
         mask_2d = mask_2d.type(torch.float32)
@@ -508,15 +517,15 @@ class InputEmbedding(nn.Module):
             pair_activations = pair_activations + template_act
             del template_batch
 
-        extra_msa_activations = self.extra_msa_activations(batch["extra_msa_feat"])
+        extra_msa_activations, extra_msa_mask, msa_mask = self.msa_removal_strategy
+        .get_extra_msa(self, batch, msa_activations)
 
         pair_activations = self.FragExtraStack(
             extra_msa_activations,
             pair_activations,
-            batch["extra_msa_mask"].type(torch.float32),
+            extra_msa_mask,
             mask_2d,
         )
-        msa_mask = batch["msa_mask"]
         del target_feat
         return msa_activations, pair_activations, msa_mask, mask_2d
 
