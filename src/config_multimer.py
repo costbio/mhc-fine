@@ -19,8 +19,8 @@ config_multimer = {
     "rel_feat": 73,
     "extra_msa_act": 25,
     "recycle": True,
-    "af_version": 2,
     "model": {
+        "version": 3,
         "embeddings_and_evoformer": {
             "evoformer_num_block": 50,
             "evoformer": {
@@ -30,7 +30,7 @@ config_multimer = {
                     "num_head": 8,
                     "attention_channel": 32,
                     "orientation": "per_column",
-                    "shared_dropout": True,
+                    "shared_dropout": True
                 },
                 "msa_row_attention_with_pair_bias": {
                     "dropout_rate": 0.15,
@@ -39,14 +39,14 @@ config_multimer = {
                     "attention_channel": 32,
                     "orientation": "per_row",
                     "shared_dropout": True,
-                    "norm_channel": 256,
+                    "norm_channel": 256
                 },
                 "msa_transition": {
                     "dropout_rate": 0.0,
                     "num_intermediate_factor": 4,
                     "orientation": "per_row",
                     "shared_dropout": True,
-                    "norm_channel": 256,
+                    "norm_channel": 256
                 },
                 "outer_product_mean": {
                     "chunk_size": 128,
@@ -56,14 +56,14 @@ config_multimer = {
                     "orientation": "per_row",
                     "shared_dropout": True,
                     "num_output_channel": 128,
-                    "norm_channel": 256,
+                    "norm_channel": 256
                 },
                 "pair_transition": {
                     "dropout_rate": 0.0,
                     "num_intermediate_factor": 4,
                     "orientation": "per_row",
                     "shared_dropout": True,
-                    "norm_channel": 128,
+                    "norm_channel": 128
                 },
                 "triangle_attention_ending_node": {
                     "dropout_rate": 0.25,
@@ -72,7 +72,7 @@ config_multimer = {
                     "orientation": "per_column",
                     "shared_dropout": True,
                     "attention_channel": 32,
-                    "norm_channel": 128,
+                    "norm_channel": 128
                 },
                 "triangle_attention_starting_node": {
                     "dropout_rate": 0.25,
@@ -81,7 +81,7 @@ config_multimer = {
                     "orientation": "per_row",
                     "shared_dropout": True,
                     "attention_channel": 32,
-                    "norm_channel": 128,
+                    "norm_channel": 128
                 },
                 "triangle_multiplication_incoming": {
                     "dropout_rate": 0.25,
@@ -90,7 +90,7 @@ config_multimer = {
                     "orientation": "per_row",
                     "shared_dropout": True,
                     "norm_channel": 128,
-                    "fuse_projection_weights": False,
+                    "fuse_projection_weights": True
                 },
                 "triangle_multiplication_outgoing": {
                     "dropout_rate": 0.25,
@@ -99,8 +99,8 @@ config_multimer = {
                     "orientation": "per_row",
                     "shared_dropout": True,
                     "norm_channel": 128,
-                    "fuse_projection_weights": False,
-                },
+                    "fuse_projection_weights": True
+                }
             },
             "extra_msa": {
                 "msa_column_attention": {
@@ -109,7 +109,7 @@ config_multimer = {
                     "num_head": 8,
                     "attention_channel": 8,
                     "orientation": "per_column",
-                    "shared_dropout": True,
+                    "shared_dropout": True
                 },
                 "msa_row_attention_with_pair_bias": {
                     "dropout_rate": 0.15,
@@ -118,14 +118,14 @@ config_multimer = {
                     "attention_channel": 8,
                     "orientation": "per_row",
                     "shared_dropout": True,
-                    "norm_channel": 64,
+                    "norm_channel": 64
                 },
                 "msa_transition": {
                     "dropout_rate": 0.0,
                     "num_intermediate_factor": 4,
                     "orientation": "per_row",
                     "shared_dropout": True,
-                    "norm_channel": 64,
+                    "norm_channel": 64
                 },
                 "outer_product_mean": {
                     "chunk_size": 128,
@@ -135,14 +135,14 @@ config_multimer = {
                     "orientation": "per_row",
                     "shared_dropout": True,
                     "num_output_channel": 128,
-                    "norm_channel": 64,
+                    "norm_channel": 64
                 },
                 "pair_transition": {
                     "dropout_rate": 0.0,
                     "num_intermediate_factor": 4,
                     "orientation": "per_row",
                     "shared_dropout": True,
-                    "norm_channel": 128,
+                    "norm_channel": 128
                 },
                 "triangle_attention_ending_node": {
                     "dropout_rate": 0.25,
@@ -151,7 +151,7 @@ config_multimer = {
                     "orientation": "per_column",
                     "shared_dropout": True,
                     "attention_channel": 32,
-                    "norm_channel": 128,
+                    "norm_channel": 128
                 },
                 "triangle_attention_starting_node": {
                     "dropout_rate": 0.25,
@@ -160,7 +160,7 @@ config_multimer = {
                     "orientation": "per_row",
                     "shared_dropout": True,
                     "attention_channel": 32,
-                    "norm_channel": 128,
+                    "norm_channel": 128
                 },
                 "triangle_multiplication_incoming": {
                     "dropout_rate": 0.25,
@@ -169,7 +169,7 @@ config_multimer = {
                     "orientation": "per_row",
                     "shared_dropout": True,
                     "norm_channel": 128,
-                    "fuse_projection_weights": False,
+                    "fuse_projection_weights": True
                 },
                 "triangle_multiplication_outgoing": {
                     "dropout_rate": 0.25,
@@ -178,18 +178,18 @@ config_multimer = {
                     "orientation": "per_row",
                     "shared_dropout": True,
                     "norm_channel": 128,
-                    "fuse_projection_weights": False,
-                },
+                    "fuse_projection_weights": True
+                }
             },
             "extra_msa_channel": 64,
             "extra_msa_stack_num_block": 4,
-            "num_msa": 252,
-            "num_extra_msa": 1152,
+            "num_msa": 508,
+            "num_extra_msa": 2048,
             "masked_msa": {
                 "profile_prob": 0.1,
                 "replace_fraction": 0.15,
                 "same_prob": 0.1,
-                "uniform_prob": 0.1,
+                "uniform_prob": 0.1
             },
             "use_chain_relative": True,
             "max_relative_chain": 2,
@@ -197,15 +197,25 @@ config_multimer = {
             "seq_channel": 384,
             "msa_channel": 256,
             "pair_channel": 128,
-            "prev_pos": {"max_bin": 20.75, "min_bin": 3.25, "num_bins": 15},
+            "prev_pos": {
+                "max_bin": 20.75,
+                "min_bin": 3.25,
+                "num_bins": 15
+            },
             "recycle_features": True,
             "recycle_pos": True,
             "template": {
-                "interchain_enabled": True,
-                "attention": {"gating": False, "num_head": 4},
-                "dgram_features": {"max_bin": 50.75, "min_bin": 3.25, "num_bins": 39},
+                "attention": {
+                    "gating": False,
+                    "num_head": 4
+                },
+                "dgram_features": {
+                    "max_bin": 50.75,
+                    "min_bin": 3.25,
+                    "num_bins": 39
+                },
                 "enabled": True,
-                "interchain_contacts_enabled": True,
+                "interchain_enabled": True,
                 "max_templates": 4,
                 "num_channels": 64,
                 "subbatch_size": 128,
@@ -216,7 +226,7 @@ config_multimer = {
                         "num_intermediate_factor": 2,
                         "orientation": "per_row",
                         "shared_dropout": True,
-                        "norm_channel": 64,
+                        "norm_channel": 64
                     },
                     "triangle_attention_ending_node": {
                         "dropout_rate": 0.25,
@@ -225,7 +235,7 @@ config_multimer = {
                         "orientation": "per_column",
                         "shared_dropout": True,
                         "attention_channel": 16,
-                        "norm_channel": 64,
+                        "norm_channel": 64
                     },
                     "triangle_attention_starting_node": {
                         "dropout_rate": 0.25,
@@ -234,7 +244,7 @@ config_multimer = {
                         "orientation": "per_row",
                         "shared_dropout": True,
                         "attention_channel": 16,
-                        "norm_channel": 64,
+                        "norm_channel": 64
                     },
                     "triangle_multiplication_incoming": {
                         "dropout_rate": 0.25,
@@ -243,7 +253,7 @@ config_multimer = {
                         "orientation": "per_row",
                         "shared_dropout": True,
                         "norm_channel": 64,
-                        "fuse_projection_weights": False,
+                        "fuse_projection_weights": True
                     },
                     "triangle_multiplication_outgoing": {
                         "dropout_rate": 0.25,
@@ -252,9 +262,9 @@ config_multimer = {
                         "orientation": "per_row",
                         "shared_dropout": True,
                         "norm_channel": 64,
-                        "fuse_projection_weights": False,
-                    },
-                },
+                        "fuse_projection_weights": True
+                    }
+                }
             },
         },
         "global_config": {
@@ -262,31 +272,33 @@ config_multimer = {
             "multimer_mode": True,
             "subbatch_size": 4,
             "use_remat": False,
-            "zero_init": True,
+            "zero_init": True
         },
         "heads": {
             "distogram": {
                 "first_break": 2.3125,
                 "last_break": 21.6875,
                 "num_bins": 64,
-                "weight": 0.3,
+                "weight": 0.3
             },
             "experimentally_resolved": {
                 "filter_by_resolution": True,
                 "max_resolution": 3.0,
                 "min_resolution": 0.1,
-                "weight": 0.01,
+                "weight": 0.01
             },
-            "masked_msa": {"weight": 2.0},
+            "masked_msa": {
+                "weight": 2.0
+            },
             "predicted_aligned_error": {
                 "filter_by_resolution": True,
+                "num_layers": 0,
                 "max_error_bin": 31.0,
                 "max_resolution": 3.0,
                 "min_resolution": 0.1,
                 "num_bins": 64,
                 "num_channels": 128,
-                "num_layers": 0,
-                "weight": 0.1,
+                "weight": 0.1
             },
             "predicted_lddt": {
                 "filter_by_resolution": True,
@@ -294,7 +306,12 @@ config_multimer = {
                 "min_resolution": 0.1,
                 "num_bins": 50,
                 "num_channels": 128,
-                "weight": 0.01,
+                "weight": 0.01
+            },
+            "predicted_binding_prob": {
+                "num_channels": 128,
+                "maximum_residues": 512,
+                "weight": 0.08
             },
             "structure_module": {
                 "angle_norm_weight": 0.01,
@@ -303,11 +320,11 @@ config_multimer = {
                 "dropout": 0.1,
                 "interface_fape": {
                     "atom_clamp_distance": 1000.0,
-                    "loss_unit_distance": 20.0,
+                    "loss_unit_distance": 20.0
                 },
                 "intra_chain_fape": {
                     "atom_clamp_distance": 10.0,
-                    "loss_unit_distance": 10.0,
+                    "loss_unit_distance": 10.0
                 },
                 "num_channel": 384,
                 "num_head": 12,
@@ -323,40 +340,41 @@ config_multimer = {
                     "loss_unit_distance": 10.0,
                     "num_channel": 128,
                     "num_residual_block": 2,
-                    "weight_frac": 0.5,
+                    "weight_frac": 0.5
                 },
                 "structural_violation_loss_weight": 1.0,
                 "violation_tolerance_factor": 12.0,
-                "weight": 1.0,
-            },
+                "weight": 1.0
+            }
         },
-        'compression': {
-            'distillation_loss_enabled': False,
-            'return_msa_pair_activations': False,
-            'evoformer_weights_indices': None,
-            'huber_delta': 0.2,
-            'msa_act_weight': 128,
-            'pair_act_weight': 128
+        "compression": {
+            "distillation_loss_enabled": False,
+            "distillation_loss_only": False,
+            "return_msa_pair_activations": False,
+            "evoformer_weights_indices": None,
+            "huber_delta": 0.2,
+            "msa_act_weight": 128,
+            "pair_act_weight": 128
         },
-        'checkpointing': {
-            'frag_extra_stack_ckpt': True,
-            'template_ckpt': True,
-            'evoformer_ckpt': True,
-            'num_segments': 8
+        "checkpointing": {
+            "frag_extra_stack_ckpt": True,
+            "template_ckpt": True,
+            "evoformer_ckpt": True,
+            "num_segments": 8
         },
-        'msa_noising': {
-            'noise_msa': False,
-            'remove_msa': False,
-            'remove_msa': True,
-            'reduce_msa': False,
-            'epoch_number': 1000,
-            'reduction_factor': 0.5
+        "msa_noising": {
+            "noise_msa": False,
+            "remove_msa": False,
+            "reduce_msa": False,
+            "epoch_number": 1000,
+            "reduction_factor": 0.5
         },
-        "masked_losses_factor": 2,
+        "masked_losses_factor": 0.4,
         "num_ensemble_eval": 1,
         "num_recycle": 1,
-        "max_num_recycle_eval": 5,
-        "min_num_recycle_eval": 5,
+        "max_num_recycle_eval": 10,
+        "min_num_recycle_eval": 10,
         "confident_plddt": 85,
-    },
+        "resample_msa_in_recycling": True
+    }
 }

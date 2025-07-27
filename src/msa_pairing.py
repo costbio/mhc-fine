@@ -462,11 +462,12 @@ def merge_chain_features(
     )
     if pair_msa_sequences:
         np_example = _concatenate_paired_and_unpaired_features(np_example)
-    np_example = _correct_post_merged_feats(
-        np_example=np_example,
-        np_chains_list=np_chains_list,
-        pair_msa_sequences=pair_msa_sequences,
-    )
+    if 'msa' in np_example:
+        np_example = _correct_post_merged_feats(
+            np_example=np_example,
+            np_chains_list=np_chains_list,
+            pair_msa_sequences=pair_msa_sequences,
+        )
 
     return np_example
 

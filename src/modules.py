@@ -46,7 +46,7 @@ class DockerIteration(nn.Module):
                     EvoformerIteration(
                         global_config["model"]["embeddings_and_evoformer"]["evoformer"],
                         global_config["model"]["embeddings_and_evoformer"],
-                        global_config["af_version"],
+                        global_config["model"]["version"],
                     )
                     for _ in range(
                         global_config["model"]["embeddings_and_evoformer"][
@@ -365,7 +365,7 @@ class FragExtraStack(nn.Module):
                 FragExtraStackIteration(
                     config["model"]["embeddings_and_evoformer"]["extra_msa"],
                     config["model"]["embeddings_and_evoformer"],
-                    config["af_version"],
+                    config["model"]["version"],
                 )
                 for _ in range(
                     config["model"]["embeddings_and_evoformer"][
@@ -466,7 +466,6 @@ class InputEmbedding(nn.Module):
         self.FragExtraStack = FragExtraStack(global_config)
 
         self.msa_removal_strategy = strategies.MsaRemovalStrategyFactory().create_strategy(self)
-        self.msa_reduction_strategy = strategies.MsaReductionStrategyFactory().create_strategy(self)
 
     def forward(self, batch, recycle):
         num_batch, num_res = batch["aatype"].shape[0], batch["aatype"].shape[1]
@@ -517,7 +516,7 @@ class InputEmbedding(nn.Module):
             pair_activations = pair_activations + template_act
             del template_batch
 
-        extra_msa_activations, extra_msa_mask, msa_mask = self.msa_removal_strategy
+        extra_msa_activations, extra_msa_mask, msa_mask = self.msa_removal_strategy \
         .get_extra_msa(self, batch, msa_activations)
 
         pair_activations = self.FragExtraStack(
@@ -1075,12 +1074,12 @@ class TemplateEmbeddingIteration(nn.Module):
         self.TriangleMultiplicationOutgoing = TriangleMultiplicationOutgoing(
             config["triangle_multiplication_outgoing"],
             global_config,
-            global_config["af_version"],
+            global_config["model"]["version"],
         )
         self.TriangleMultiplicationIngoing = TriangleMultiplicationIngoing(
             config["triangle_multiplication_incoming"],
             global_config,
-            global_config["af_version"],
+            global_config["model"]["version"],
         )
         self.TriangleAttentionStartingNode = TriangleAttentionStartingNode(
             config["triangle_attention_starting_node"], global_config

@@ -304,7 +304,7 @@ def preprocess_for_inference(protein_seq, peptide_seq, protein_a3m_path=None):
 
     print("Mering features...")
     all_chain_features = add_assembly_features(all_chain_features)
-    np_example = pair_and_merge(all_chain_features, is_homomer)
+    np_example = pair_and_merge(all_chain_features, is_homomer, bool(protein_a3m_path))
     np_example = pad_msa(np_example, 512)
 
     # specifically for this project
@@ -346,7 +346,7 @@ def process_unmerged_features(all_chain_features):
         )
 
 
-def pair_and_merge(all_chain_features, is_homomer):
+def pair_and_merge(all_chain_features, is_homomer, has_msa):
     """Runs processing on features to augment, pair and merge.
 
     Args:
@@ -360,13 +360,13 @@ def pair_and_merge(all_chain_features, is_homomer):
 
     np_chains_list = list(all_chain_features.values())
 
-    # We can only pair MSA sequences if we have an MSA.
-    pair_msa_sequences = not is_homomer and "msa" in np_chains_list[0]
+    pair_msa_sequences = not is_homomer and has_msa
 
-    if pair_msa_sequences:
+    if pair_msa_sequences and has_msa:
         np_chains_list = msa_pairing.create_paired_features(chains=np_chains_list)
         np_chains_list = msa_pairing.deduplicate_unpaired_sequences(np_chains_list)
-    np_chains_list = crop_chains(
+    if has_msa:
+        np_chains_list = crop_chains(
         np_chains_list,
         msa_crop_size=MSA_CROP_SIZE,
         pair_msa_sequences=pair_msa_sequences,

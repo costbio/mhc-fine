@@ -97,10 +97,13 @@ class Model:
         """
         model = modules.DockerIteration(global_config)
         model.load_state_dict(torch.load(in_path_saved_state_dict))
-        removed_blocks = [i for i in range(global_config['model']['embeddings_and_evoformer']['evoformer_num_block']) 
-        if i not in global_config['model']['compression']['evoformer_weights_indices']]
-        for evo_i in removed_blocks:
-            model.Evoformer[int(evo_i)].skip_coefficient = 1
+        
+        if global_config['model']['compression']['evoformer_weights_indices']:
+            removed_blocks = [i for i in range(global_config['model']['embeddings_and_evoformer']['evoformer_num_block']) 
+            if i not in global_config['model']['compression']['evoformer_weights_indices']]
+            for evo_i in removed_blocks:
+                model.Evoformer[int(evo_i)].skip_coefficient = 1
+        
         return model
 
     def set_cfg(self, config, model_path):
