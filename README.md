@@ -1,3 +1,5 @@
+This is a copy of the original mhc-fine repository at https://bitbucket.org/abc-group/mhc-fine/src/main/
+
 
 ![6vb3](./img/6vb3.png)
 
